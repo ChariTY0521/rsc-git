@@ -1,8 +1,7 @@
 {
-    assets:
-    {
-        "directory": "./"
-    },
-    "installCommand": "",
-    "buildCommand": ""
+  "assets": {
+    "directory": "./"
+  },
+  "installCommand": "",
+  "buildCommand": ""
 }
