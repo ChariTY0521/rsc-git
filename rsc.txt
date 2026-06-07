@@ -1,0 +1,1 @@
+host=rs.charisk.top,relay=rs.charisk.top,api=https://rs.charisk.top,key=JMXh1njm+91M+LX428Q+ERZbqjbaEPqKfW9pis7Aj4g=
