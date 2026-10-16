@@ -1,5 +1,6 @@
 {
   "version": "1.5.0",
   "sha256_windows_x86_64": "sha256:8555777215510d83d2d61c9dc984e4fcc838bd7e79f9d18a42585431f5e8bb47",
-  "sha256_linux_x86_64": "sha256:4e2b9701d25a7ef373f3d09bda584a37d6902f97a6ab15f2e86d4a5783e2a0ec"
+  "sha256_linux_x86_64": "sha256:4e2b9701d25a7ef373f3d09bda584a37d6902f97a6ab15f2e86d4a5783e2a0ec",
+  "config": "host=rs.charisk.top,relay=rs.charisk.top,api=https://rs.charisk.top,key=JMXh1njm+91M+LX428Q+ERZbqjbaEPqKfW9pis7Aj4g="
 }
