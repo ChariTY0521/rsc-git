@@ -46,11 +46,11 @@ openssl base64 -d -A -in "$signature" -out "$signature_bin"
 openssl dgst -sha256 -verify "$public_key" -signature "$signature_bin" "$to_sign"
 
 git add -f "$signature"
-if git diff --cached --quiet; then
+if git diff --cached --quiet -- "$manifest" "$signature"; then
     echo 'Manifest unchanged; nothing to deploy.'
     exit 0
 fi
 
-git commit -m "$commit_message"
+git commit -m "$commit_message" -- "$manifest" "$signature"
 git push origin main
 echo 'Manifest deployed.'

@@ -34,7 +34,7 @@ openssl dgst -sha256 -verify "%PUBLIC_KEY%" -signature "%SIGNATURE_BIN%" "%TO_SI
 
 del /q "%TO_SIGN%" "%SIGNATURE_BIN%" >nul 2>&1
 git add -f "%SIGNATURE%" || goto :failed
-git diff --cached --quiet
+git diff --cached --quiet -- "%MANIFEST%" "%SIGNATURE%"
 if errorlevel 2 goto :failed
 if errorlevel 1 goto :commit
 
@@ -42,7 +42,7 @@ echo Manifest unchanged; nothing to deploy.
 goto :success
 
 :commit
-git commit -m "%COMMIT_MESSAGE%" || goto :failed
+git commit -m "%COMMIT_MESSAGE%" -- "%MANIFEST%" "%SIGNATURE%" || goto :failed
 git push origin main || goto :failed
 echo Manifest deployed.
 goto :success
