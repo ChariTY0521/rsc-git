@@ -2,7 +2,7 @@
 export const PUBLIC_ORIGIN = "https://rsc.charisk.top";
 
 export const LATEST_RELEASE = Object.freeze({
-  id: "v1.5.10",
-  version: "1.5.10",
+  id: "v1.5.11",
+  version: "1.5.11",
   minimumClientVersion: "1.5.4",
 });
