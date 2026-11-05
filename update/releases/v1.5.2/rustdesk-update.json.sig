@@ -1,0 +1,1 @@
+{"algorithm":"ed25519","key_id":"2026-ed25519-main","schema_version":1,"signature":"DxUTxFPJ8M/VZWEwNhD4FjgVI4jEH17XBJ35hZAr4TfS4EDJUqTXs6q1RtXG6Czsc/2z6Wcxafmt6OySke3SCQ=="}
