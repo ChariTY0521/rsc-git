@@ -1,2 +1,9 @@
-rustdesk.json text eol=lf
-rustdesk.json.sig -text
+* text=auto eol=lf
+
+*.exe binary
+*.dll binary
+*.zip binary
+*.7z binary
+
+update/releases/**/rustdesk-update.json text eol=lf
+update/releases/**/rustdesk-update.json.sig text eol=lf

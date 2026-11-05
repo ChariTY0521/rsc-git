@@ -1,0 +1,8 @@
+{
+  "entry": "./update-service.js",
+  "installCommand": "",
+  "buildCommand": "",
+  "assets": {
+    "directory": "./"
+  }
+}
