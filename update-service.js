@@ -5,6 +5,7 @@ export const UPDATE_VERSION_PATH = "/update/version/latest";
 const EXPECTED_PUBLIC_HOST = "rsc.charisk.top";
 const RELEASE_ID_PATTERN = /^v[0-9]+\.[0-9]+\.[0-9]+$/;
 const VERSION_PATTERN = /^[0-9]+\.[0-9]+\.[0-9]+$/;
+const CONTROLLED_USER_AGENT_PATTERN = /^RustDesk-Controlled\/([0-9]+\.[0-9]+\.[0-9]+)$/;
 
 function configuredPublicOrigin() {
   let url;
@@ -38,22 +39,43 @@ function validateLatestRelease(release) {
     throw new Error("LATEST_RELEASE must be null or an object");
   }
 
-  const { id, version } = release;
+  const { id, version, minimumClientVersion } = release;
   if (
     typeof id !== "string" ||
     typeof version !== "string" ||
     !RELEASE_ID_PATTERN.test(id) ||
     !VERSION_PATTERN.test(version) ||
-    id !== `v${version}`
+    id !== `v${version}` ||
+    (minimumClientVersion !== undefined &&
+      (typeof minimumClientVersion !== "string" ||
+        !VERSION_PATTERN.test(minimumClientVersion)))
   ) {
     throw new Error("LATEST_RELEASE must use matching vX.Y.Z and X.Y.Z values");
   }
-  return { id, version };
+  return { id, version, minimumClientVersion: minimumClientVersion ?? null };
 }
 
-export function latestUpdateUrl(release = LATEST_RELEASE) {
+function meetsMinimumClientVersion(clientVersion, minimumClientVersion) {
+  if (minimumClientVersion === null) {
+    return true;
+  }
+  if (typeof clientVersion !== "string" || !VERSION_PATTERN.test(clientVersion)) {
+    return false;
+  }
+  const clientParts = clientVersion.split(".").map(Number);
+  const minimumParts = minimumClientVersion.split(".").map(Number);
+  for (let index = 0; index < clientParts.length; index += 1) {
+    if (clientParts[index] !== minimumParts[index]) {
+      return clientParts[index] > minimumParts[index];
+    }
+  }
+  return true;
+}
+
+export function latestUpdateUrl(release = LATEST_RELEASE, clientVersion = null) {
   const validatedRelease = validateLatestRelease(release);
-  return validatedRelease === null
+  return validatedRelease === null ||
+    !meetsMinimumClientVersion(clientVersion, validatedRelease.minimumClientVersion)
     ? ""
     : `${publicOrigin}/update/releases/${validatedRelease.id}`;
 }
@@ -76,7 +98,14 @@ function jsonResponse(value) {
   });
 }
 
-export async function handleRequest(request) {
+function controlledClientVersion(request) {
+  const match = CONTROLLED_USER_AGENT_PATTERN.exec(
+    request.headers.get("user-agent") ?? "",
+  );
+  return match === null ? null : match[1];
+}
+
+export async function handleRequest(request, release = LATEST_RELEASE) {
   let url;
   try {
     url = new URL(request.url);
@@ -97,7 +126,7 @@ export async function handleRequest(request) {
     });
   }
 
-  return jsonResponse({ url: latestUpdateUrl() });
+  return jsonResponse({ url: latestUpdateUrl(release, controlledClientVersion(request)) });
 }
 
 export default {
